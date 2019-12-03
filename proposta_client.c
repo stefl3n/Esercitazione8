@@ -1,19 +1,19 @@
-* echo_client.c
- *	+include echo.h
- */
 
+#include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <rpc/rpc.h>
 #include "proposta.h"
 #define DIM 100
-
+#define PROPOSTAPROG 0x20000013
+#define PROPOSTAVERS 1
 int main(int argc, char *argv[]){
 
 	CLIENT *cl;
 	char **echo_msg; // il risultato è un char*
     resultFileScan * f_ris;
     int * d_ris;
-	char *server;
+	char *server, *nomefile;
 	char *msg;
 	char ok[5];
 
@@ -24,7 +24,7 @@ int main(int argc, char *argv[]){
 
 	server = argv[1];
 
-	cl = clnt_create(server, ECHOPROG, ECHOVERS, "udp");
+	cl = clnt_create(server, PROPOSTAPROG, PROPOSTAVERS, "udp");
 	if (cl == NULL) {
 		clnt_pcreateerror(server);
 		exit(1);
@@ -33,27 +33,28 @@ int main(int argc, char *argv[]){
 
 	/* CORPO DEL CLIENT:
 	/* ciclo di accettazione di richieste da utente ------- */
-	msg=(char*)malloc(DIM+1);
 
 	printf("Digitare F per file_scan, digitare D per dir_scan, EOF per terminare: ");
 
-	while (gets(msg))
+	while (scanf("%s",msg)!=EOF)
 	{
         if(msg[0]=='F')
-        {
-            char nomefile[100];
             printf("Inserire il nome del file: ");
-            if(gets(nomefile))
+            if(scanf("%s",nomefile)!=1)
             {
-                f_ris = file_scan(&nomefile, cl);
+                f_ris = file_scan_1(&nomefile, cl);
 		        if (f_ris == NULL) {
 			        fprintf(stderr, "%s: %s fallisce la rpc\n", argv[0], server);
 			        clnt_perror(cl, server);
 			        exit(1);
 		        }
-                if (*f_ris == NULL) {
-			        fprintf(stderr, "%s: %s restituisce una struttura nulla\n", argv[0], server);
+		        //TODO logica ancora da implementare.
+                if (f_ris->numchar==-1) {
+			        fprintf(stderr, "%s: %s file vuoto\n", argv[0], server);
 		        }
+		        else if(f_ris->numchar==-2){
+                    fprintf(stderr, "%s: %s file non trovato\n", argv[0], server);
+                }
 		        else
                     printf("Operazione completata con successo -> \n Numero di caratteri: %d \n Numero di parole: %d \n Numero di righe: %d.\n", f_ris->numchar, f_ris->numword, f_ris->numline);
             }
@@ -70,7 +71,7 @@ int main(int argc, char *argv[]){
                 strcpy(argDir->nomedir, nomedir);
                 argDir->soglia = soglia;
 
-                d_ris = dir_scan(&argdir, cl);
+                d_ris = dir_scan_1(&argdir, cl);
 		        if (d_ris == NULL) {
 			        fprintf(stderr, "%s: %s fallisce la rpc\n", argv[0], server);
 			        clnt_perror(cl, server);
@@ -90,7 +91,6 @@ int main(int argc, char *argv[]){
 	} // while gets(msg)
 
 	// Libero le risorse: memoria allocata con malloc e gestore di trasporto
-	free(msg);
 	clnt_destroy(cl);
 	printf("Termino...\n");
 	exit(0);
