@@ -9,7 +9,7 @@
  */ 
  
 struct argDir{ 
-	char *nomedir; 
+	string nomedir<125>; 
 	int soglia; 
 }; 
  
@@ -17,13 +17,13 @@ struct resultFileScan{
     int numchar; 
     int numword; 
     int numline; 
-} 
+};
  
  
 program PROPOSTAPROG { 
 	version PROPOSTAVERS { 
 		resultFileScan FILE_SCAN(string) = 1; 
-		int DIR_SCAN(Operandi) = 2; 
+		int DIR_SCAN(argDir) = 2; 
 	} = 1; 
 } = 0x20000013; 
  
