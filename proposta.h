@@ -20,20 +20,20 @@ struct argDir {
 };
 typedef struct argDir argDir;
 
-struct resultFileScan {
+struct ResultFileScan {
 	int numchar;
 	int numword;
 	int numline;
 };
-typedef struct resultFileScan resultFileScan;
+typedef struct ResultFileScan ResultFileScan;
 
 #define PROPOSTAPROG 0x20000013
 #define PROPOSTAVERS 1
 
 #if defined(__STDC__) || defined(__cplusplus)
 #define FILE_SCAN 1
-extern  resultFileScan * file_scan_1(char **, CLIENT *);
-extern  resultFileScan * file_scan_1_svc(char **, struct svc_req *);
+extern  ResultFileScan * file_scan_1(char **, CLIENT *);
+extern  ResultFileScan * file_scan_1_svc(char **, struct svc_req *);
 #define DIR_SCAN 2
 extern  int * dir_scan_1(argDir *, CLIENT *);
 extern  int * dir_scan_1_svc(argDir *, struct svc_req *);
@@ -41,8 +41,8 @@ extern int propostaprog_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
 
 #else /* K&R C */
 #define FILE_SCAN 1
-extern  resultFileScan * file_scan_1();
-extern  resultFileScan * file_scan_1_svc();
+extern  ResultFileScan * file_scan_1();
+extern  ResultFileScan * file_scan_1_svc();
 #define DIR_SCAN 2
 extern  int * dir_scan_1();
 extern  int * dir_scan_1_svc();
@@ -53,11 +53,11 @@ extern int propostaprog_1_freeresult ();
 
 #if defined(__STDC__) || defined(__cplusplus)
 extern  bool_t xdr_argDir (XDR *, argDir*);
-extern  bool_t xdr_resultFileScan (XDR *, resultFileScan*);
+extern  bool_t xdr_ResultFileScan (XDR *, ResultFileScan*);
 
 #else /* K&R C */
 extern bool_t xdr_argDir ();
-extern bool_t xdr_resultFileScan ();
+extern bool_t xdr_ResultFileScan ();
 
 #endif /* K&R C */
 

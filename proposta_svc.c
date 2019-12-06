@@ -34,7 +34,7 @@ propostaprog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 
 	case FILE_SCAN:
 		_xdr_argument = (xdrproc_t) xdr_wrapstring;
-		_xdr_result = (xdrproc_t) xdr_resultFileScan;
+		_xdr_result = (xdrproc_t) xdr_ResultFileScan;
 		local = (char *(*)(char *, struct svc_req *)) file_scan_1_svc;
 		break;
 

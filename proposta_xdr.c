@@ -10,7 +10,7 @@ xdr_argDir (XDR *xdrs, argDir *objp)
 {
 	register int32_t *buf;
 
-	 if (!xdr_string (xdrs, &objp->nomedir, 125))
+	 if (!xdr_string (xdrs, &objp->nomedir, 200))
 		 return FALSE;
 	 if (!xdr_int (xdrs, &objp->soglia))
 		 return FALSE;
@@ -18,7 +18,7 @@ xdr_argDir (XDR *xdrs, argDir *objp)
 }
 
 bool_t
-xdr_resultFileScan (XDR *xdrs, resultFileScan *objp)
+xdr_ResultFileScan (XDR *xdrs, ResultFileScan *objp)
 {
 	register int32_t *buf;
 
